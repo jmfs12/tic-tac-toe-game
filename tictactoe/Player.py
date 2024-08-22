@@ -46,7 +46,7 @@ class PlayerIA(Player):
     def minimax(self, game, player):
         if(len(game.valid_moves()) == 9):
             move = random.choice(game.valid_moves())
-            return move
+            return {'position' : move}
         else:
             max_player = self.letter
             other_player = 'O' if player == 'X' else 'X'

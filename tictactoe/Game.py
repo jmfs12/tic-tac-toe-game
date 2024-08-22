@@ -84,7 +84,8 @@ def play(game, computer, user):
         elif not winner:
             continue
         elif winner:
-            print(f"The big winner is {winner}\nCONGRATULATIONS!!!")
+            print(f"The big winner is {winner}")
+            print(f"CONGRATULATIONS!!!!!") if winner == user.letter else print(f"YOU LOSE!!")
             break
 
         
