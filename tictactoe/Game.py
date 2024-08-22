@@ -1,11 +1,6 @@
-from Player import PlayerComputer
-from Player import PlayerUser
+from Player import PlayerComputer, PlayerUser, PlayerIA
 import random
 import time
-
-# 0 (0,0) 1 (0,1) 2 (0,2)
-# 3 (1,0) 4 (1,1) 5 (1,2)
-# 6 (2,0) 7 (2,1) 8 (2,2)
  
 class TicTacToe:
 
@@ -54,37 +49,18 @@ class TicTacToe:
 
     def get_winner(self):
         rows = [row[:] for row in self.board]
-        columns = [[line[0] for line in self.board], [line[1] for line in self.board], [line[2] for line in self.board]]
-        diagonals = [[self.board[0][0], self.board[1][1], self.board[2][2]], [self.board[2][0], self.board[1][1], self.board[0][2]]]
+        columns = [[line[i] for line in self.board] for i in range(3)]
+        diagonals = [[self.board[i][i] for i in range(3)], [self.board[2][0], self.board[1][1], self.board[0][2]]]
 
         vec = [rows, columns, diagonals]
 
         for part in vec:
             win, letter = verify_winner(part)
             if win:
-                print(f"The big winner is {letter}\nCONGRATULATIONS!!!")
-                return win
+                return letter
         return win
-        
-def verify_winner(vec):
-    for line in vec:
-        if (line[0] == 'X' or line[0] == 'O') and line[0] == line[1] and line[0] == line[2]:
-            return True, line[0]
-    return False, False
-
-        
-
-def main():
-
-    letter = None
-    while letter != 'X' and letter != 'O':
-        letter = input("Choice your letter (X or O) ")
-
-    game = TicTacToe()
-    game.print_board_example(letter)
-    computer = PlayerComputer('X' if letter == 'O' else 'O')
-    user = PlayerUser(letter)
-
+    
+def play(game, computer, user):
     turn = random.choice([0,1])
     
     while True:
@@ -108,7 +84,36 @@ def main():
         elif not winner:
             continue
         elif winner:
+            print(f"The big winner is {winner}\nCONGRATULATIONS!!!")
             break
+
+        
+def verify_winner(vec):
+    for line in vec:
+        if (line[0] == 'X' or line[0] == 'O') and line[0] == line[1] and line[0] == line[2]:
+            return True, line[0]
+    return False, False
+
+        
+
+def main():
+
+    choice = str
+    while(choice != "normal" and choice != "very hard"):
+        choice = input("You wanna play in NORMAL or VERY HARD? ")
+        choice = choice.lower()
+
+    
+    letter = None
+    while letter != 'X' and letter != 'O':
+        letter = input("Choice your letter (X or O) ")
+
+    game = TicTacToe()
+    game.print_board_example(letter)
+    computer = PlayerIA('X' if letter == 'O' else 'O') if choice == "very hard" else PlayerComputer(('X' if letter == 'O' else 'O'))
+    user = PlayerUser(letter)
+
+    play(game, computer, user)
     
 
 if __name__ == '__main__':
